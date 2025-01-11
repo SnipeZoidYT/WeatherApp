@@ -18,7 +18,7 @@
         document.getElementById('getWeather').addEventListener('click', async () => {
             const city = document.getElementById('city').value;
             require('dotenv').config();
-            const apiKey = process.env.API_KEY;
+            const apiKey = 'PUT YOUR API KEY HERE';
             const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
 
             try {
