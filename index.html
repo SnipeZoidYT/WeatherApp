@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="IMG/icon.jpg" />
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button id="getWeather">Get Weather</button>
+    <div id="weather"></div>
+
+    <script>
+
+        document.getElementById('getWeather').addEventListener('click', async () => {
+            const city = document.getElementById('city').value;
+            require('dotenv').config();
+            const apiKey = process.env.API_KEY;
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const weatherInfo = `
+                        ${data.location.name}, ${data.location.country}
+                        <p>Temperature: ${data.current.temp_c}°C</p>
+                        <p>Condition: ${data.current.condition.text}</p>
+                        <img src="https:${data.current.condition.icon}" alt="Weather Icon">
+                        <p>Humidity: ${data.current.humidity}%</p>
+                        <p>Wind: ${data.current.wind_mph} mph</p>
+                    `;
+                    document.getElementById('weather').innerHTML = weatherInfo;
+                } else {
+                    document.getElementById('weather').textContent = `Error: ${data.error.message}`;
+                }
+            } catch (error) {
+                document.getElementById('weather').textContent = 'Unable to fetch weather data.';
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
